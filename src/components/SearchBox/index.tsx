@@ -8,8 +8,11 @@ import {AppState} from '../..';
 @observer
 export class SearchBox extends Component<{appState: AppState},{}> {
   searchChanged(event: React.SyntheticEvent) {
+    const appState = this.props.appState;
     const target = event.target as HTMLInputElement;
-    this.props.appState.searchQuery = target.value;
+    appState.searchQuery = target.value;
+    appState.contacts =  appState.allContacts.filter(contact => match(contact, target.value));
+    appState.selectedContact = appState.contacts[0] || null;
   }
   render() {
     const appState = this.props.appState;
@@ -23,4 +26,14 @@ export class SearchBox extends Component<{appState: AppState},{}> {
       </div>
     );
   }
+}
+
+/**
+ * @param  {Contact} contact
+ * @param  {string} query
+ * @returns boolean
+ */
+function match(contact:Contact, query: string): boolean {
+  return (contact.firstName && contact.firstName.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1) ||
+    (contact.lastName && contact.lastName.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1);
 }

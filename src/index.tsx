@@ -7,6 +7,7 @@ import {observer} from 'mobx-react';
 import {ContactList} from './components/ContactList';
 import {ContactDetails} from './components/ContactDetails';
 import {SearchBox} from './components/SearchBox';
+import Contact from './interfaces/Contact';
 
 import CONTACTS from './contacts.data';
 
@@ -15,11 +16,13 @@ declare const require;
 const DevTools = require('mobx-react-devtools').default;
 
 export class AppState {
-    @observable contacts = [];
+    allContacts: Contact[] = [];
+    @observable contacts: Contact[] = [];
     @observable searchQuery: string = '';
     @observable selectedContact: any;
 
     constructor() {
+      this.allContacts = CONTACTS;
       this.contacts = CONTACTS;
       this.selectedContact = this.contacts[0];
     }
