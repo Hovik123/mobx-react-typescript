@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 
 import Contact from '../../interfaces/Contact';
 import {ProfilePicture} from './ProfilePicture';
-import {AppState} from '../..';
+import {AppState} from '../../appState';
 
 @observer
 export class ContactDetails extends Component<{appState: AppState}, {}> {

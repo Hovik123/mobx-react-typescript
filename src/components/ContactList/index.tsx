@@ -5,7 +5,7 @@ import {computed} from 'mobx';
 
 import Contact from '../../interfaces/Contact';
 
-import {AppState} from '../..';
+import {AppState} from '../../appState';
 import {ContactListItem} from './ContactListItem';
 import {ContactListDivider} from './ContactListDivider';
 

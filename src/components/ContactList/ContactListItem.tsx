@@ -2,7 +2,7 @@ import {Component} from 'react';
 import * as React from 'react';
 import {observer} from 'mobx-react';
 
-import {AppState} from '../..';
+import {AppState} from '../../appState';
 
 declare const require;
 const classnames = require('classnames');

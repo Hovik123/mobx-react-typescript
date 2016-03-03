@@ -3,7 +3,7 @@ import {Component} from 'react';
 import {observer} from 'mobx-react';
 
 import Contact from '../../interfaces/Contact';
-import {AppState} from '../..';
+import {AppState} from '../../appState';
 
 @observer
 export class SearchBox extends Component<{appState: AppState},{}> {
