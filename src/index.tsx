@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {observable, computed} from 'mobx';
 import {observer} from 'mobx-react';
-import {Router, Route, browserHistory} from 'react-router';
+import {browserHistory} from 'react-router';
 
 import {ContactList} from './components/ContactList';
 import {ContactDetails} from './components/ContactDetails';
@@ -22,6 +22,20 @@ export class AppState {
 
     constructor() {
       this.contacts = CONTACTS;
+
+      browserHistory.listen(location => {
+
+        const found = CONTACTS.some(contact=> {
+          if (contact.id === location.pathname) {
+            this.setSelectedContactId(contact.id, {silent: true});
+            return true;
+          }
+        });
+
+        if (!found) {
+          this.selectFirstContact();
+        }
+      });
     }
 
     @computed
@@ -48,16 +62,22 @@ export class AppState {
      return this._selectedContactId;
     }
 
-    setSelectedContactId(id: string) {
-      browserHistory.push(id);
+    setSelectedContactId(id: string, options: {silent: boolean} = {silent: false}) {
+      if (!options.silent) {
+        browserHistory.push(id);
+      }
       this._selectedContactId = id;
+    }
+
+    private selectFirstContact() {
+      this.setSelectedContactId(CONTACTS[0].id);
     }
 }
 
 export const appState =  new AppState();
 
 @observer
-class App extends Component<{children}, {}> {
+class App extends Component<{appState: AppState}, {}> {
     render() {
       return (
         <div className="container">
@@ -67,7 +87,7 @@ class App extends Component<{children}, {}> {
               <SearchBox appState={appState} />
               <ContactList appState={appState} />
             </aside>
-            {this.props.children}
+            <ContactDetails appState={appState} />
           </main>
           <footer className="main-footer"></footer>
           <DevTools />
@@ -79,14 +99,9 @@ class App extends Component<{children}, {}> {
 @observer
 class ContactDetailsWrapper extends Component<{params}, {}> {
   render() {
-    return <ContactDetails appState={appState} params={this.props.params}/>
+    return <ContactDetails appState={appState} />
   }
 }
 
-ReactDOM.render(
-  <Router history={browserHistory}>
-    <Route path='/' component={App}>
-      <Route path=':contactId' component={ContactDetailsWrapper} />
-    </Route>
-  </Router>,
+ReactDOM.render(<App appState={appState} />,
   document.getElementById('root'));

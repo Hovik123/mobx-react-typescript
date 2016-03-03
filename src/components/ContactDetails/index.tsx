@@ -7,16 +7,7 @@ import {ProfilePicture} from './ProfilePicture';
 import {AppState} from '../..';
 
 @observer
-export class ContactDetails extends Component<{params: {contactId: string}, appState: AppState}, {}> {
-
-
-
-  componentWillMount() {
-    const appState = this.props.appState;
-    if (this.props.params.contactId) {
-      appState.setSelectedContactId(this.props.params.contactId);
-    }
-  }
+export class ContactDetails extends Component<{appState: AppState}, {}> {
 
   render() {
     const contact = this.props.appState.selectedContact;
